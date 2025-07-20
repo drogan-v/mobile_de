@@ -1,4 +1,4 @@
-from src.euro_rate import EuroRate
+from external_lib.euro_rate import EuroRate
 
 def test_euro_rate():
     e = EuroRate()

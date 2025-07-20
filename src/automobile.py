@@ -1,8 +1,49 @@
+from pathlib import Path
+from abc import ABC, abstractmethod
+from typing import Union
+
 from .mobile_de import MobileDe
 from bs4 import BeautifulSoup
 
 
-class AutoMobile:
+class AutoMobileABC(ABC):
+    @abstractmethod
+    def title(self):
+        pass
+
+    @abstractmethod
+    def brutto_price(self) -> str:
+        pass
+
+    @abstractmethod
+    def netto_price(self) -> str:
+        pass
+
+    @abstractmethod
+    def tax_vat(self) -> str:
+        pass
+
+    @abstractmethod
+    def year_of_manufacture(self) -> str:
+        pass
+
+    @abstractmethod
+    def mileage(self) -> str:
+        pass
+
+    @abstractmethod
+    def color(self) -> str:
+        pass
+
+    @abstractmethod
+    def first_registration_date(self) -> str:
+        pass
+
+    @abstractmethod
+    def engine_capacity_cm3(self) -> int:
+        pass
+
+class AutoMobile(AutoMobileABC):
     # TODO: there is a lot of functions! You can find more on the https://auto-parser.ru/parser_mobile_de
     # TODO: RELEASE ALL OF THEM
     def __init__(self, url: str):
@@ -140,3 +181,11 @@ class AutoMobile:
             return ""
         except IndexError:
             return ""
+
+
+class AutoMobileFake(AutoMobile):
+    def __init__(self, path: Union[Path, str]):
+        absolute_path = (Path.cwd() / path).resolve()
+        with open(absolute_path, "r", encoding="utf-8") as f:
+            self.html = f.read()
+        self.soup = BeautifulSoup(self.html, "html.parser")
