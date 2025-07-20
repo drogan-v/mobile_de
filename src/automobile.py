@@ -16,23 +16,40 @@ class AutoMobile:
     def title(self) -> str:
         return self.soup.find(class_="dNpqi").text
 
-    def netto_price(self) -> str:
-        pass
-
     def brutto_price(self) -> str:
-        pass
+        try:
+            return self.soup.find(class_="jjvdJ").text.replace("\xa0", " ")
+        except AttributeError:
+            return "—"
+
+    def netto_price(self) -> str:
+        price = self.__netto_string()
+        return price.split(" (Netto), ")[0].replace("\xa0", " ") if price else "—"
 
     def tax_vat(self) -> str:
-        pass
+        tax = self.__netto_string()
+        return tax.split(" (Netto), ")[1].split(" ")[0] if tax else "—"
 
     def year_of_manufacture(self) -> str:
-        pass
+        element = self.soup.find("dt", attrs={"data-testid": "constructionYear-item"})
+        if element:
+            year = element.find_next("dd").text
+            return year
+        return "—"
 
     def mileage(self) -> str:
-        pass
+        element = self.soup.find("dt", attrs={"data-testid": "climatisation-item"})
+        if element:
+            milage = element.find_next("dd").text
+            return milage
+        return "—"
 
     def color(self) -> str:
-        pass
+        element = self.soup.find("dt", attrs={"data-testid": "color-item"})
+        if element:
+            color = element.find_next("dd").text
+            return color
+        return "—"
 
     def number_of_owners(self) -> str:
         pass
@@ -62,7 +79,11 @@ class AutoMobile:
         pass
 
     def first_registration_date(self) -> str:
-        pass
+        element = self.soup.find("dt", attrs={"data-testid": "firstRegistration-item"})
+        if element:
+            date = element.find_next("dd").text
+            return date
+        return "—"
 
     def condition(self) -> str:
         pass
@@ -76,8 +97,17 @@ class AutoMobile:
     def engine_type(self) -> str:
         pass
 
-    def engine_capacity(self) -> str:
-        pass
+    def engine_capacity_cm3(self) -> int:
+        element = self.soup.find("dt", attrs={"data-testid": "cubicCapacity-item"})
+        if element:
+            capacity = int((element
+                        .find_next("dd")
+                        .text
+                        .replace("\xa0", " ")
+                        .split(" ")[0]
+                        .replace('.', '')))
+            return capacity
+        return 0
 
     def number_of_horsepower(self) -> str:
         pass
@@ -102,3 +132,11 @@ class AutoMobile:
 
     def on_the_move(self) -> str:
         pass
+
+    def __netto_string(self) -> str:
+        try:
+            return self.soup.find(class_="Hr6xO").select("span.Q7YSy.ZD2EM")[0].text
+        except AttributeError:
+            return ""
+        except IndexError:
+            return ""
