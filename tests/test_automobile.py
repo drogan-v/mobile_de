@@ -1,4 +1,4 @@
-from src.automobile import AutoMobileFake
+from mobile_de.automobile import AutoMobileFake
 
 #https://suchen.mobile.de/fahrzeuge/details.html?id=431347360&action=topOfPage&dam=false&isSearchRequest=true&ms=17200%3B68%3B%3B&ref=srp&refId=a849c465-ccb7-1b84-925d-ee4f47bba2ce&s=Car&searchId=a849c465-ccb7-1b84-925d-ee4f47bba2ce&vc=Car
 html_path = "tests/Mercedes-Benz.html"

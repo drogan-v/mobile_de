@@ -1,4 +1,4 @@
-from src.mobile_de import MobileDe
+from mobile_de.mobile_de import MobileDe
 
 def test_links():
     # It's a fragile test, but it's needed to verify that the link is parsed correctly.
