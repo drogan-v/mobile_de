@@ -7,7 +7,7 @@ import re
 
 logger = logging.getLogger(__name__)
 
-class ParseFailed(Exception):
+class URLParseFailed(Exception):
     pass
 
 class MobileDe:
@@ -24,8 +24,8 @@ class MobileDe:
 
     def html(self, url: str) -> str:
         driver = Firefox(options=self.options)
-        url = self._parse_url(url)
         try:
+            url = self._parse_url(url)
             driver.set_window_size(1920, 1080)
             driver.get(url)
 
@@ -36,7 +36,8 @@ class MobileDe:
             button.click()
 
             return driver.page_source
-
+        except URLParseFailed as e:
+            raise e
         except Exception as e:
             logger.error(e)
             return ""
@@ -48,6 +49,6 @@ class MobileDe:
         # https://suchen.mobile.de/auto-inserat/mercedes-benz-vito-kombi-116-cdi-extralang-8-sitzer-klima-a-c-meschede/430458101.html
         matches = re.findall(self.pattern, url)
         if not matches:
-            raise ParseFailed
+            raise URLParseFailed
         return self.base_url + matches[0]
 

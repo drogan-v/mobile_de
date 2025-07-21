@@ -2,7 +2,7 @@ from pathlib import Path
 from abc import ABC, abstractmethod
 from typing import Union
 
-from .mobile_de import MobileDe
+from .mobile_de import MobileDe, URLParseFailed
 from bs4 import BeautifulSoup
 
 
@@ -48,7 +48,10 @@ class AutoMobile(AutoMobileABC):
     # TODO: RELEASE ALL OF THEM
     def __init__(self, url: str):
         self.url = url
-        self.html = MobileDe().html(self.url)
+        try:
+            self.html = MobileDe().html(self.url)
+        except URLParseFailed as e:
+            raise e
         self.soup = BeautifulSoup(self.html, "html.parser")
 
     def info(self):
